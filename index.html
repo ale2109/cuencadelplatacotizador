@@ -74,6 +74,7 @@
       justify-content: space-between;
       padding: 8px;
       border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
     }
     
     .servicio-cotizado button {
@@ -191,6 +192,34 @@
       width: 50px;
       margin-right: 5px;
     }
+    
+    /* Estilos para el botón de descuento */
+    .btn-descuento {
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    
+    .btn-descuento:hover {
+      background-color: #f57c00;
+    }
+    
+    .descuento-input {
+      width: 50px;
+      margin-left: 5px;
+      display: none;
+    }
+    
+    .info-descuento {
+      color: #ff9800;
+      font-size: 0.9em;
+      margin-top: 5px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -227,7 +256,9 @@
       <td>para in 5156<br>para out 6232</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-0">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-0')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-0', 'desc-0')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-0">
       </td>
     </tr>
     <tr>
@@ -240,7 +271,9 @@
       <td> para in 5156<br>para out 6232</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-1">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-1')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-1', 'desc-1')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-1">
       </td>
     </tr>
     <tr>
@@ -253,7 +286,9 @@
       <td>5163</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-2">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-2')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-2', 'desc-2')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-2">
       </td>
     </tr>
     <tr>
@@ -266,7 +301,9 @@
       <td>5163</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-3">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-3')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-3', 'desc-3')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-3">
       </td>
     </tr>
     <tr>
@@ -279,7 +316,9 @@
       <td>5164</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-4">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-4')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-4', 'desc-4')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-4">
       </td>
     </tr>
     <tr>
@@ -292,7 +331,9 @@
       <td>5164</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-5">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-5')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-5', 'desc-5')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-5">
       </td>
     </tr>
     <tr>
@@ -305,7 +346,9 @@
       <td>5579</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-6">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-6')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-6', 'desc-6')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-6">
       </td>
     </tr>
     <tr>
@@ -318,7 +361,9 @@
       <td>6185</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-7">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-7')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-7', 'desc-7')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-7">
       </td>
     </tr>
     <tr>
@@ -331,7 +376,9 @@
       <td>6185</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-8">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-8')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-8', 'desc-8')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-8">
       </td>
     </tr>
     <tr>
@@ -344,7 +391,9 @@
       <td>5166</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-9">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-9')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-9', 'desc-9')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-9">
       </td>
     </tr>
     <tr>
@@ -357,7 +406,9 @@
       <td>5166</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-10">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-10')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-10', 'desc-10')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-10">
       </td>
     </tr>
     <tr>
@@ -370,7 +421,9 @@
       <td>6396</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-11">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-11')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-11', 'desc-11')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-11">
       </td>
     </tr>
     <tr>
@@ -383,7 +436,9 @@
       <td>6396</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-12">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-12')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-12', 'desc-12')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-12">
       </td>
     </tr>
     <tr>
@@ -396,7 +451,9 @@
       <td>6396</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-13">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-13')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-13', 'desc-13')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-13">
       </td>
     </tr>
     <tr>
@@ -409,7 +466,9 @@
       <td>6396</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-14">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-14')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-14', 'desc-14')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-14">
       </td>
     </tr>
     <tr>
@@ -422,7 +481,9 @@
       <td>5167</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-15">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-15')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-15', 'desc-15')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-15">
       </td>
     </tr>
     <tr>
@@ -435,7 +496,9 @@
       <td>5167</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-16">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-16')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-16', 'desc-16')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-16">
       </td>
     </tr>
     <tr>
@@ -448,7 +511,9 @@
       <td>5836</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-17">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-17')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-17', 'desc-17')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-17">
       </td>
     </tr>
     <tr>
@@ -461,7 +526,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-18">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-18')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-18', 'desc-18')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-18">
       </td>
     </tr>
     <tr>
@@ -474,7 +541,9 @@
       <td>6576</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-19">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-19')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-19', 'desc-19')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-19">
       </td>
     </tr>
     <tr>
@@ -487,7 +556,9 @@
       <td>6576</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-20">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-20')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-20', 'desc-20')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-20">
       </td>
     </tr>
     <tr>
@@ -500,7 +571,9 @@
       <td>5158</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-21">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-21')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-21', 'desc-21')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-21">
       </td>
     </tr>
     <tr>
@@ -513,7 +586,9 @@
       <td>5158</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-22">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-22')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-22', 'desc-22')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-22">
       </td>
     </tr>
     <tr>
@@ -526,7 +601,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-23">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-23')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-23', 'desc-23')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-23">
       </td>
     </tr>
     <tr>
@@ -539,7 +616,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-24">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-24')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-24', 'desc-24')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-24">
       </td>
     </tr>
     <tr>
@@ -552,7 +631,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-25">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-25')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-25', 'desc-25')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-25">
       </td>
     </tr>
     <tr>
@@ -565,7 +646,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-26">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-26')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-26', 'desc-26')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-26">
       </td>
     </tr>
     <tr>
@@ -578,7 +661,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-27">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-27')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-27', 'desc-27')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-27">
       </td>
     </tr>
     <tr>
@@ -591,7 +676,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-28">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-28')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-28', 'desc-28')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-28">
       </td>
     </tr>
     <tr>
@@ -604,7 +691,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-29">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-29')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-29', 'desc-29')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-29">
       </td>
     </tr>
     <tr>
@@ -617,7 +706,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-30">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-30')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-30', 'desc-30')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-30">
       </td>
     </tr>
     <tr>
@@ -630,7 +721,9 @@
       <td>6287</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-31">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-31')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-31', 'desc-31')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-31">
       </td>
     </tr>
     <tr>
@@ -643,7 +736,9 @@
       <td>6287</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-32">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-32')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-32', 'desc-32')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-32">
       </td>
     </tr>
     <tr>
@@ -656,7 +751,9 @@
       <td>6287</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-33">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-33')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-33', 'desc-33')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-33">
       </td>
     </tr>
     <tr>
@@ -669,7 +766,9 @@
       <td>6287</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-34">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-34')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-34', 'desc-34')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-34">
       </td>
     </tr>
     <tr>
@@ -682,7 +781,9 @@
       <td>6287</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-35">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-35')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-35', 'desc-35')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-35">
       </td>
     </tr>
     <tr>
@@ -695,7 +796,9 @@
       <td>6609</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-36">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-36')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-36', 'desc-36')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-36">
       </td>
     </tr>
     <tr>
@@ -708,7 +811,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-37">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-37')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-37', 'desc-37')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-37">
       </td>
     </tr>
     <tr>
@@ -721,7 +826,9 @@
       <td>6609</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-38">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-38')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-38', 'desc-38')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-38">
       </td>
     </tr>
     <tr>
@@ -734,7 +841,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-39">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-39')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-39', 'desc-39')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-39">
       </td>
     </tr>
     <tr>
@@ -747,7 +856,9 @@
       <td>6184</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-40">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-40')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-40', 'desc-40')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-40">
       </td>
     </tr>
     <tr>
@@ -760,7 +871,9 @@
       <td>6576</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-41">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-41')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-41', 'desc-41')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-41">
       </td>
     </tr>
     <tr>
@@ -773,7 +886,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-42">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-42')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-42', 'desc-42')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-42">
       </td>
     </tr>
     <tr>
@@ -786,7 +901,9 @@
       <td>-</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-43">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-43')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-43', 'desc-43')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-43">
       </td>
     </tr>
     <tr>
@@ -799,7 +916,9 @@
       <td>5177</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-44">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-44')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-44', 'desc-44')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-44">
       </td>
     </tr>
     <tr>
@@ -812,7 +931,9 @@
       <td>5177</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-45">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-45')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-45', 'desc-45')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-45">
       </td>
     </tr>
     <tr>
@@ -825,7 +946,9 @@
       <td>5196</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-46">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-46')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-46', 'desc-46')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-46">
       </td>
     </tr>
     <tr>
@@ -838,7 +961,9 @@
       <td>5196</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-47">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-47')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-47', 'desc-47')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-47">
       </td>
     </tr>
     <tr>
@@ -851,7 +976,9 @@
       <td>5276</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-48">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-48')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-48', 'desc-48')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-48">
       </td>
     </tr>
     <tr>
@@ -864,7 +991,9 @@
       <td>5276</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-49">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-49')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-49', 'desc-49')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-49">
       </td>
     </tr>
     <tr>
@@ -877,7 +1006,9 @@
       <td>6435</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-50">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-50')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-50', 'desc-50')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-50">
       </td>
     </tr>
     <tr>
@@ -890,7 +1021,9 @@
       <td>6435</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-51">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-51')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-51', 'desc-51')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-51">
       </td>
     </tr>
     <tr>
@@ -903,7 +1036,9 @@
       <td>5179</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-52">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-52')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-52', 'desc-52')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-52">
       </td>
     </tr>
     <tr>
@@ -916,7 +1051,9 @@
       <td>5179</td>
       <td>
         <input type="number" class="cantidad-input" min="1" value="1" id="cant-53">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-53')">Agregar</button>
+        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-53', 'desc-53')">Agregar</button>
+        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-53">
       </td>
     </tr>
   </table>
@@ -927,6 +1064,9 @@
       <p>No hay servicios seleccionados</p>
     </div>
     <div id="totalCotizacion">Total: $0.00</div>
+    <div id="totalConDescuento" style="font-weight: bold; font-size: 1.2em; text-align: right; margin: 10px 0; color: #ff9800; display: none;">
+      Total con descuento: $0.00
+    </div>
     
     <div class="validez-cotizacion">
       <strong>Validez de la cotización:</strong> 
@@ -970,6 +1110,7 @@
     var originalTableHtml = document.getElementById("priceTable").innerHTML;
     var serviciosCotizados = [];
     var totalCotizacion = 0;
+    var totalConDescuento = 0;
 
     function searchTable() {
       var input, filter, table, tr, td, i, txtValue;
@@ -1005,25 +1146,31 @@
     });
 
     // Función para agregar un servicio a la cotización
-    function agregarACotizacion(boton, cantidadId) {
+    function agregarACotizacion(boton, cantidadId, descuentoId) {
       var cantidad = parseInt(document.getElementById(cantidadId).value) || 1;
+      var descuento = parseInt(document.getElementById(descuentoId).value) || 0;
       var fila = boton.parentNode.parentNode;
       var celdas = fila.getElementsByTagName("td");
       
       var precioNumerico = parseFloat(celdas[1].textContent.replace(/[^0-9.]/g, ''));
       var precioTotal = precioNumerico * cantidad;
+      var precioConDescuento = precioTotal * (1 - (descuento / 100));
       
       var servicio = {
         nombre: celdas[0].textContent,
         precio: celdas[1].textContent,
         precioNumerico: precioNumerico,
         cantidad: cantidad,
+        descuento: descuento,
         precioTotal: precioTotal,
-        precioTotalFormateado: "$" + precioTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        precioConDescuento: precioConDescuento,
+        precioTotalFormateado: "$" + precioTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        precioConDescuentoFormateado: "$" + precioConDescuento.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       };
       
       serviciosCotizados.push(servicio);
       totalCotizacion += servicio.precioTotal;
+      totalConDescuento += servicio.precioConDescuento;
       
       actualizarCotizacion();
     }
@@ -1031,28 +1178,51 @@
     // Función para actualizar la visualización de la cotización
     function actualizarCotizacion() {
       var contenedor = document.getElementById("serviciosSeleccionados");
+      var totalConDescuentoElement = document.getElementById("totalConDescuento");
       
       if (serviciosCotizados.length === 0) {
         contenedor.innerHTML = "<p>No hay servicios seleccionados</p>";
         document.getElementById("totalCotizacion").textContent = "Total: $0.00";
+        totalConDescuentoElement.style.display = "none";
         return;
       }
       
       var html = "";
+      var hayDescuentos = false;
+      
       for (var i = 0; i < serviciosCotizados.length; i++) {
+        var servicio = serviciosCotizados[i];
         html += '<div class="servicio-cotizado">';
-        html += '<span>' + serviciosCotizados[i].nombre + ' - ' + serviciosCotizados[i].precio + ' x ' + serviciosCotizados[i].cantidad + ' = ' + serviciosCotizados[i].precioTotalFormateado + '</span>';
+        html += '<div style="width: 100%;">';
+        html += '<span>' + servicio.nombre + ' - ' + servicio.precio + ' x ' + servicio.cantidad + ' = ' + servicio.precioTotalFormateado + '</span>';
+        
+        if (servicio.descuento > 0) {
+          hayDescuentos = true;
+          html += '<div class="info-descuento">';
+          html += 'Descuento: ' + servicio.descuento + '% - Total con descuento: ' + servicio.precioConDescuentoFormateado;
+          html += '</div>';
+        }
+        
+        html += '</div>';
         html += '<button onclick="eliminarServicio(' + i + ')">Eliminar</button>';
         html += '</div>';
       }
       
       contenedor.innerHTML = html;
       document.getElementById("totalCotizacion").textContent = "Total: $" + totalCotizacion.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      
+      if (hayDescuentos) {
+        totalConDescuentoElement.style.display = "block";
+        totalConDescuentoElement.textContent = "Total con descuento: $" + totalConDescuento.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      } else {
+        totalConDescuentoElement.style.display = "none";
+      }
     }
 
     // Función para eliminar un servicio de la cotización
     function eliminarServicio(indice) {
       totalCotizacion -= serviciosCotizados[indice].precioTotal;
+      totalConDescuento -= serviciosCotizados[indice].precioConDescuento;
       serviciosCotizados.splice(indice, 1);
       actualizarCotizacion();
     }
@@ -1061,6 +1231,7 @@
     function limpiarCotizacion() {
       serviciosCotizados = [];
       totalCotizacion = 0;
+      totalConDescuento = 0;
       actualizarCotizacion();
       document.getElementById("emailDestino").value = "";
       document.getElementById("nombreCliente").value = "";
@@ -1093,12 +1264,24 @@
       cuerpoCorreo += "Servicios cotizados:\n";
       
       for (var i = 0; i < serviciosCotizados.length; i++) {
-        cuerpoCorreo += "- " + serviciosCotizados[i].nombre + ": " + serviciosCotizados[i].precio + 
-                       " x " + serviciosCotizados[i].cantidad + " = " + serviciosCotizados[i].precioTotalFormateado + "\n";
+        var servicio = serviciosCotizados[i];
+        cuerpoCorreo += "- " + servicio.nombre + ": " + servicio.precio + 
+                       " x " + servicio.cantidad + " = " + servicio.precioTotalFormateado;
+        
+        if (servicio.descuento > 0) {
+          cuerpoCorreo += " (Descuento: " + servicio.descuento + "% - Total con descuento: " + servicio.precioConDescuentoFormateado + ")";
+        }
+        
+        cuerpoCorreo += "\n";
       }
       
-      cuerpoCorreo += "\nTotal: $" + totalCotizacion.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "\n\n";
-      cuerpoCorreo += "Validez de la cotización: " + diasValidez + " día" + (diasValidez !== "1" ? "s" : "") + "\n\n";
+      cuerpoCorreo += "\nTotal: $" + totalCotizacion.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      
+      if (totalConDescuento < totalCotizacion) {
+        cuerpoCorreo += "\nTotal con descuento: $" + totalConDescuento.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      
+      cuerpoCorreo += "\n\nValidez de la cotización: " + diasValidez + " día" + (diasValidez !== "1" ? "s" : "") + "\n\n";
       
       if (mensaje) {
         cuerpoCorreo += "Mensaje adicional:\n" + mensaje + "\n\n";
@@ -1152,12 +1335,14 @@
       doc.text(`Validez: ${diasValidez} día${diasValidez !== "1" ? "s" : ""}`, 14, 73);
       
       // Tabla de servicios
-      const headers = [["Servicio", "Precio Unitario", "Cantidad", "Subtotal"]];
+      const headers = [["Servicio", "Precio Unitario", "Cantidad", "Subtotal", "Descuento", "Total con descuento"]];
       const data = serviciosCotizados.map(servicio => [
         servicio.nombre, 
         servicio.precio, 
         servicio.cantidad, 
-        servicio.precioTotalFormateado
+        servicio.precioTotalFormateado,
+        servicio.descuento > 0 ? servicio.descuento + "%" : "-",
+        servicio.descuento > 0 ? servicio.precioConDescuentoFormateado : "-"
       ]);
       
       doc.autoTable({
@@ -1180,16 +1365,22 @@
       doc.setFont(undefined, 'bold');
       doc.text(`Total: $${totalCotizacion.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`, 14, finalY);
       
+      if (totalConDescuento < totalCotizacion) {
+        doc.setTextColor(255, 153, 0);
+        doc.text(`Total con descuento: $${totalConDescuento.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`, 14, finalY + 8);
+        doc.setTextColor(0, 0, 0);
+      }
+      
       // Nota importante
       doc.setFontSize(10);
       doc.setFont(undefined, 'bold');
       doc.setTextColor(255, 0, 0);
-      doc.text("NOTA IMPORTANTE:", 14, finalY + 10);
+      doc.text("NOTA IMPORTANTE:", 14, finalY + 16);
       doc.setFont(undefined, 'normal');
       doc.setTextColor(0, 0, 0);
-      doc.text("Esta cotización está sujeta a modificaciones en virtud de las fluctuaciones del mercado", 14, finalY + 16);
-      doc.text("o por factores económicos extremos. Los servicios cotizados están sujetos a", 14, finalY + 22);
-      doc.text("disponibilidad al momento de la confirmación.", 14, finalY + 28);
+      doc.text("Esta cotización está sujeta a modificaciones en virtud de las fluctuaciones del mercado", 14, finalY + 22);
+      doc.text("o por factores económicos extremos. Los servicios cotizados están sujetos a", 14, finalY + 28);
+      doc.text("disponibilidad al momento de la confirmación.", 14, finalY + 34);
       
       // Pie de página
       doc.setFontSize(8);
@@ -1198,6 +1389,17 @@
       
       // Guardar PDF
       doc.save(`Cotizacion_${nombreCliente.replace(/ /g, '_')}_${fecha.replace(/\//g, '-')}.pdf`);
+    }
+    
+    // Funciones para el descuento
+    function toggleDescuento(boton) {
+      var inputDescuento = boton.nextElementSibling;
+      if (inputDescuento.style.display === "none" || inputDescuento.style.display === "") {
+        inputDescuento.style.display = "inline-block";
+        inputDescuento.focus();
+      } else {
+        inputDescuento.style.display = "none";
+      }
     }
   </script>
 </body>
