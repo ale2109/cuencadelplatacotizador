@@ -7,6 +7,74 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <style>
+    /* Estilos para el login */
+    #loginContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    #loginForm {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    #loginForm h2 {
+      text-align: center;
+      color: #814599;
+      margin-bottom: 20px;
+    }
+    
+    #loginForm input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    #loginForm button {
+      width: 100%;
+      padding: 10px;
+      background-color: #814599;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    #loginForm button:hover {
+      background-color: #9b9cde;
+    }
+    
+    #logoutBtn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 8px 15px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 100;
+      display: none;
+    }
+    
+    #logoutBtn:hover {
+      background-color: #d32f2f;
+    }
+
     /* Estilos para la tabla */
     table {
       border-collapse: collapse;
@@ -220,885 +288,907 @@
       margin-top: 5px;
       width: 100%;
     }
+    
+    /* Ocultar contenido principal hasta que se inicie sesión */
+    .main-content {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <img src="https://static5.cuencadelplata.com/img/logo.png" alt="Turismo Cuenca del Plata">
-    <h1>TURISMO</h1>
-    <p>CUENCA DEL PLATA</p>
-    <p>Cuenca del Plata Receptivo Mayorista</p>
+  <!-- Botón de logout (inicialmente oculto) -->
+  <button id="logoutBtn" onclick="logout()">Cerrar Sesión</button>
+  
+  <!-- Formulario de login -->
+  <div id="loginContainer">
+    <div id="loginForm">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button onclick="login()">Ingresar</button>
+      <div id="loginError" style="color: red; margin-top: 10px; text-align: center;"></div>
+    </div>
   </div>
-
-  <h1>Tarifario Servicios Opcionales Guias y choferes Enero a junio 2025</h1>
-
-  <input type="text" id="searchInput" placeholder="Buscar por Servicio, Venta o Id Mobile...">
-  <button onclick="searchTable()">Buscar</button>
-
-  <table id="priceTable">
-    <tr>
-      <th>Servicios</th>
-      <th>Venta</th>
-      <th>Neto</th>
-      <th>Comisión</th>
-      <th>Horarios</th>
-      <th>Salidas</th>
-      <th>Id Mobile</th>
-      <th class="columna-accion">Acción</th>
-    </tr>
-    <tr>
-      <td>Trf In o Out Apt Arg hacia htls Arg</td>
-      <td>$ 18,400.00</td>
-      <td>$ 17,000.00</td>
-      <td>$ 1,400.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>para in 5156<br>para out 6232</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-0">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-0', 'desc-0')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-0">
-      </td>
-    </tr>
-    <tr>
-      <td>Trf In o Out Apt Arg hacia htls Br (Mínimo 2 paxs)</td>
-      <td>$ 25,900.00</td>
-      <td>$ 24,400.00</td>
-      <td>$ 1,500.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td> para in 5156<br>para out 6232</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-1">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-1', 'desc-1')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-1">
-      </td>
-    </tr>
-    <tr>
-      <td>Ctts Argentinas sin ingreso desde htls Arg</td>
-      <td>$ 32,000.00</td>
-      <td>$ 30,000.00</td>
-      <td>$ 2,000.00</td>
-      <td>07:30</td>
-      <td>Todos los días</td>
-      <td>5163</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-2">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-2', 'desc-2')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-2">
-      </td>
-    </tr>
-    <tr>
-      <td>Ctts Argentinas sin ingreso desde htls Br/Meliá</td>
-      <td>$ 45,000.00</td>
-      <td>$ 42,900.00</td>
-      <td>$ 2,100.00</td>
-      <td>Todos los días</td>
-      <td>-</td>
-      <td>5163</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-3">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-3', 'desc-3')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-3">
-      </td>
-    </tr>
-    <tr>
-      <td>Cataratas Brasileras desde htls Arg/Br</td>
-      <td>$ 37,000.00</td>
-      <td>$ 34,900.00</td>
-      <td>$ 2,100.00</td>
-      <td>t/d por la mañana</td>
-      <td>-</td>
-      <td>5164</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-4">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-4', 'desc-4')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-4">
-      </td>
-    </tr>
-    <tr>
-      <td>Cataratas Brasileras desde Melia</td>
-      <td>$ 45,000.00</td>
-      <td>$ 42,900.00</td>
-      <td>$ 2,100.00</td>
-      <td>-</td>
-      <td>t/d por la mañana</td>
-      <td>5164</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-5">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-5', 'desc-5')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-5">
-      </td>
-    </tr>
-    <tr>
-      <td>Pque de Aves sólo trfs a cont. de cat br -<Br> sin ingresos</td>
-      <td>$ 22,900.00</td>
-      <td>$ 21,300.00</td>
-      <td>$ 1,600.00</td>
-      <td>-</td>
-      <td>todos los dias</td>
-      <td>5579</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-6">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-6', 'desc-6')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-6">
-      </td>
-    </tr>
-    <tr>
-      <td>Mocona Desde htls Arg</td>
-      <td>$ 73,800.00</td>
-      <td>$ 71,000.00</td>
-      <td>$ 2,800.00</td>
-      <td>-</td>
-      <td>Jueves y Domingos</td>
-      <td>6185</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-7">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-7', 'desc-7')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-7">
-      </td>
-    </tr>
-    <tr>
-      <td>Mocona Desde htls Br/Melia</td>
-      <td>$ 88,900.00</td>
-      <td>$ 85,700.00</td>
-      <td>$ 3,200.00</td>
-      <td>-</td>
-      <td>Jueves y Domingos</td>
-      <td>6185</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-8">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-8', 'desc-8')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-8">
-      </td>
-    </tr>
-    <tr>
-      <td>Ruinas y Minas htl Arg</td>
-      <td>$ 58,000.00</td>
-      <td>$ 55,500.00</td>
-      <td>$ 2,500.00</td>
-      <td>07:30</td>
-      <td>lunes , miercoles y sabados</td>
-      <td>5166</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-9">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-9', 'desc-9')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-9">
-      </td>
-    </tr>
-    <tr>
-      <td>Ruinas y Minas htls Br/Melia</td>
-      <td>$ 72,000.00</td>
-      <td>$ 69,200.00</td>
-      <td>$ 2,800.00</td>
-      <td>-</td>
-      <td>lunes , miercoles y sabados</td>
-      <td>5166</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-10">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-10', 'desc-10')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-10">
-      </td>
-    </tr>
-    <tr>
-      <td>Jungle Fly desde htls Arg</td>
-      <td>$ 40,000.00</td>
-      <td>$ 36,300.00</td>
-      <td>$ 3,700.00</td>
-      <td>08:00/10:00 <br> 14:00/16:00</td>
-      <td>lunes a Domingo</td>
-      <td>6396</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-11">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-11', 'desc-11')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-11">
-      </td>
-    </tr>
-    <tr>
-      <td>Jungle Fly desde htls Br/Melia</td>
-      <td>$ 45,400.00</td>
-      <td>$ 41,700.00</td>
-      <td>$ 3,700.00</td>
-      <td>08:00/10:00 <br> 14:00/16:00</td>
-      <td>lunes a Domingo</td>
-      <td>6396</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-12">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-12', 'desc-12')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-12">
-      </td>
-    </tr>
-    <tr>
-      <td>Jungle Fly menores desde htls Arg</td>
-      <td>$ 28,800.00</td>
-      <td>$ 27,000.00</td>
-      <td>$ 1,800.00</td>
-      <td>08:00/10:00 <br> 14:00/16:00</td>
-      <td>lunes a Domingo</td>
-      <td>6396</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-13">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-13', 'desc-13')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-13">
-      </td>
-    </tr>
-    <tr>
-      <td>Jungle Fly menores desde htls Br/Melia</td>
-      <td>$ 34,300.00</td>
-      <td>$ 32,400.00</td>
-      <td>$ 1,900.00</td>
-      <td>08:00/10:00 <br> 14:00/16:00</td>
-      <td>lunes a Domingo</td>
-      <td>6396</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-14">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-14', 'desc-14')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-14">
-      </td>
-    </tr>
-    <tr>
-      <td>Minas de Wanda desde htls Arg</td>
-      <td>$ 22,400.00</td>
-      <td>$ 20,600.00</td>
-      <td>$ 1,800.00</td>
-      <td>09:00/15:00</td>
-      <td>-</td>
-      <td>5167</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-15">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-15', 'desc-15')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-15">
-      </td>
-    </tr>
-    <tr>
-      <td>Minas de Wanda desde htls Br/Melia</td>
-      <td>$ 34,800.00</td>
-      <td>$ 32,700.00</td>
-      <td>$ 2,100.00</td>
-      <td>09:00/15:00</td>
-      <td>-</td>
-      <td>5167</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-16">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-16', 'desc-16')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-16">
-      </td>
-    </tr>
-    <tr>
-      <td>Dutty Free Shop</td>
-      <td>$ 15,000.00</td>
-      <td>$ 13,200.00</td>
-      <td>$ 1,800.00</td>
-      <td>-</td>
-      <td>Todos los dias</td>
-      <td>5836</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-17">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-17', 'desc-17')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-17">
-      </td>
-    </tr>
-    <tr>
-      <td>Caminata Recreativa en la selva</td>
-      <td>$ consultar</td>
-      <td>$ consultar</td>
-      <td>$ consultar</td>
-      <td>08:00/10:00 <br>14:00/16:00</td>
-      <td>Lunes a Domingo</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-18">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-18', 'desc-18')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-18">
-      </td>
-    </tr>
-    <tr>
-      <td>Travesia Iguazu<br><b>a partir del 01/11/24 <b></td>
-      <td>$ 35,000.00</td>
-      <td>$ 33,400.00</td>
-      <td>$ 1,600.00</td>
-      <td>-</td>
-      <td>Todos los dias</td>
-      <td>6576</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-19">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-19', 'desc-19')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-19">
-      </td>
-    </tr>
-    <tr>
-      <td>Travesia Iguazu Menores de 7 a 16 años<br><b> partir del 01/11/24 <b></td>
-      <td>$ 28,000.00</td>
-      <td>$ 26,700.00</td>
-      <td>$ 1,300.00</td>
-      <td>-</td>
-      <td>Todos los dias</td>
-      <td>6576</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-20">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-20', 'desc-20')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-20">
-      </td>
-    </tr>
-    <tr>
-      <td>Gran Aventura <br><b>partir del 01/11/24<b></td>
-      <td>$ 75,000.00</td>
-      <td>$ 72,600.00</td>
-      <td>$ 2,400.00</td>
-      <td>En Exc con Ctts Arg</td>
-      <td>-</td>
-      <td>5158</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-21">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-21', 'desc-21')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-21">
-      </td>
-    </tr>
-    <tr>
-      <td>Gran Aventura Menores de 12 a 16 años y Jubilados<br><b>partir del 01/11/24<b></td>
-      <td>$ 60,000.00</td>
-      <td>$ 57,800.00</td>
-      <td>$ 2,200.00</td>
-      <td>En Exc con Ctts Arg</td>
-      <td>-</td>
-      <td>5158</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-22">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-22', 'desc-22')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-22">
-      </td>
-    </tr>
-    <tr>
-      <td>Paseo Ecologico <br><b>partir del 01/11/24</b></td>
-      <td>$ 27,000.00</td>
-      <td>$ 25,700.00</td>
-      <td>$ 1,300.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-23">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-23', 'desc-23')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-23">
-      </td>
-    </tr>
-    <tr>
-      <td>Paseo Ecologico Menores de 12 a 16 años y Jubilados <br><b> partir del 01/11/24</b></td>
-      <td>$ 21,600.00</td>
-      <td>$ 20,500.00</td>
-      <td>$ 1,100.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-24">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-24', 'desc-24')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-24">
-      </td>
-    </tr>
-    <tr>
-      <td>Ingreso Biocentro General</td>
-      <td>$ 5,000.00</td>
-      <td>$ 4,200.00</td>
-      <td>$ 800.00</td>
-      <td>09:00 a 18:00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-25">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-25', 'desc-25')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-25">
-      </td>
-    </tr>
-    <tr>
-      <td>Ingreso a Biocentro Menores de 6 a 12 años</td>
-      <td>$ 4,300.00</td>
-      <td>$ 3,800.00</td>
-      <td>$ 500.00</td>
-      <td>09:00 a 18:00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-26">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-26', 'desc-26')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-26">
-      </td>
-    </tr>
-    <tr>
-      <td>Ingreso a Biocentro Jubilados</td>
-      <td>$ 4,500.00</td>
-      <td>$ 3,900.00</td>
-      <td>$ 600.00</td>
-      <td>09:00 a 18:00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-27">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-27', 'desc-27')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-27">
-      </td>
-    </tr>
-    <tr>
-      <td>Madero Tango P/Paxs Sector Premium con Cena<br> y Show desde htls Arg</td>
-      <td>$ 60,000.00</td>
-      <td>$ 56,300.00</td>
-      <td>$ 3,700.00</td>
-      <td>20:00</td>
-      <td>Martes a Domingos</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-28">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-28', 'desc-28')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-28">
-      </td>
-    </tr>
-    <tr>
-      <td>Madero Tango P/Paxs Sector Vip <br> Desde Htls Arg</td>
-      <td>$ 45,000.00</td>
-      <td>$ 42,500.00</td>
-      <td>$ 2,500.00</td>
-      <td>20:00</td>
-      <td>Martes a Domingos</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-29">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-29', 'desc-29')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-29">
-      </td>
-    </tr>
-    <tr>
-      <td>Madero Tango P/Paxs <br>Solo Show Desde Htls Arg</td>
-      <td>$ 25,000.00</td>
-      <td>$ 23,600.00</td>
-      <td>$ 1,400.00</td>
-      <td>20:00</td>
-      <td>Martes a Domingos</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-30">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-30', 'desc-30')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-30">
-      </td>
-    </tr>
-    <tr>
-      <td>Catamaran desde htls Arg <br>del 15/04/25 al 29/06/25</td>
-      <td>$ 35,000.00</td>
-      <td>$ 33,300.00</td>
-      <td>$ 1,700.00</td>
-      <td>16:40</td>
-      <td>Martes a Domingos</td>
-      <td>6287</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-31">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-31', 'desc-31')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-31">
-      </td>
-    </tr>
-    <tr>
-      <td>Catamaran desde Htls Br<br> del 15/04/25 al 29/06/25</td>
-      <td>$ 40,000.00</td>
-      <td>$ 38,200.00</td>
-      <td>$ 1,800.00</td>
-      <td>16:40</td>
-      <td>Martes a Domingos</td>
-      <td>6287</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-32">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-32', 'desc-32')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-32">
-      </td>
-    </tr>
-    <tr>
-      <td>Catamaran Menores de 6 a 12 años htls Arg<br> del 15/04/25 al 29/06/25</td>
-      <td>$ 22,000.00</td>
-      <td>$ 20,800.00</td>
-      <td>$ 1,200.00</td>
-      <td>16:00</td>
-      <td>Martes a Domingos</td>
-      <td>6287</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-33">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-33', 'desc-33')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-33">
-      </td>
-    </tr>
-    <tr>
-      <td>Catamaran Menores de 6 a 12 años htls Br <br>del 15/04/25 al 29/06/25</td>
-      <td>$ 27,000.00</td>
-      <td>$ 25,700.00</td>
-      <td>$ 1,300.00</td>
-      <td>-</td>
-      <td>Todos los dias</td>
-      <td>6287</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-34">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-34', 'desc-34')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-34">
-      </td>
-    </tr>
-    <tr>
-      <td>Catamaran Menores de 0 a 5 años <br>del 15/04/25 al 29/06/25</td>
-      <td>$ 10,100.00</td>
-      <td>$ 9,100.00</td>
-      <td>$ 1,000.00</td>
-      <td>16:00</td>
-      <td>Martes a Domingos</td>
-      <td>6287</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-35">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-35', 'desc-35')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-35">
-      </td>
-    </tr>
-    <tr>
-      <td>Paquete Catamaran + merienda yabutucaba <br>desde htls Arg <br>a partir del 15/04/25</td>
-      <td>$ 37,000.00</td>
-      <td>$ 34,800.00</td>
-      <td>$ 2,200.00</td>
-      <td>16:40</td>
-      <td>Martes a Domingos</td>
-      <td>6609</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-36">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-36', 'desc-36')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-36">
-      </td>
-    </tr>
-    <tr>
-      <td>Paquete Catamaran + merienda yabutucaba<br> desde Htls Br<br> a partir del 15/04/25</td>
-      <td>$ 44,400.00</td>
-      <td>$ 42,000.00</td>
-      <td>$ 2,400.00</td>
-      <td>16:40</td>
-      <td>Martes a Domingos</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-37">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-37', 'desc-37')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-37">
-      </td>
-    </tr>
-    <tr>
-      <td>Paquete Catamaran + merienda yabutucaba <br>Menores de 6 a 12 años htls Arg<br> a partir del 15/04/25</td>
-      <td>$ 27,600.00</td>
-      <td>$ 25,900.00</td>
-      <td>$ 1,700.00</td>
-      <td>16:00</td>
-      <td>Martes a Domingos</td>
-      <td>6609</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-38">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-38', 'desc-38')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-38">
-      </td>
-    </tr>
-    <tr>
-      <td>Paquete Catamaran + merienda yabutucaba <br> Menores de 6 a 12 años htls Br <br>a partir del 15/04/25</td>
-      <td>$ 30,500.00</td>
-      <td>$ 28,700.00</td>
-      <td>$ 1,800.00</td>
-      <td>-</td>
-      <td>Todos los dias</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-39">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-39', 'desc-39')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-39">
-      </td>
-    </tr>
-    <tr>
-      <td>Combo Aldea + bio desdes htls Arg</td>
-      <td>$ 43,000.00</td>
-      <td>$ 39,800.00</td>
-      <td>$ 3,200.00</td>
-      <td>08:30</td>
-      <td>Lunes a Domingos <br>solo por la mañana</td>
-      <td>6184</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-40">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-40', 'desc-40')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-40">
-      </td>
-    </tr>
-    <tr>
-      <td>Combo Aldea + bio desdes htls Br/Melia</td>
-      <td>$ 49,000.00</td>
-      <td>$ 45,500.00</td>
-      <td>$ 3,500.00</td>
-      <td>-</td>
-      <td>Lunes a Domingos <br>solo por la mañana</td>
-      <td>6576</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-41">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-41', 'desc-41')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-41">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc City tour en P. Iguazu htls Arg</td>
-      <td>$ 19,500.00</td>
-      <td>$ 18,000.00</td>
-      <td>$ 1,500.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-42">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-42', 'desc-42')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-42">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc City tour en P. Iguazu htls Br/Melia</td>
-      <td>$ 34,500.00</td>
-      <td>$ 32,900.00</td>
-      <td>$ 1,600.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-43">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-43', 'desc-43')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-43">
-      </td>
-    </tr>
-    <tr>
-      <td>Aldea Guarani desde htl Arg</td>
-      <td>$ 30,700.00</td>
-      <td>$ 28,300.00</td>
-      <td>$ 2,400.00</td>
-      <td>-</td>
-      <td>Lunes a Domingos <br>solo por la mañana</td>
-      <td>5177</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-44">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-44', 'desc-44')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-44">
-      </td>
-    </tr>
-    <tr>
-      <td>Aldea Guarani desde htl Br/Melia</td>
-      <td>$ 38,700.00</td>
-      <td>$ 35,900.00</td>
-      <td>$ 2,800.00</td>
-      <td>-</td>
-      <td>Lunes a Domingos <br>solo por la mañana</td>
-      <td>5177</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-45">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-45', 'desc-45')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-45">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc Tour de compras en Ciudad del Este/htls Arg</td>
-      <td>$ 23,500.00</td>
-      <td>$ 22,000.00</td>
-      <td>$ 1,500.00</td>
-      <td>-</td>
-      <td>Martes, Jueves y Sabados</td>
-      <td>5196</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-46">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-46', 'desc-46')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-46">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc Tour de compras en Ciudad del Este/htls Br/Melia</td>
-      <td>$ 29,300.00</td>
-      <td>$ 27,400.00</td>
-      <td>$ 1,900.00</td>
-      <td>-</td>
-      <td>Martes,Jueves y Sabados</td>
-      <td>5196</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-47">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-47', 'desc-47')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-47">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc Luna Llena htls Arg (no incluye cena)<br><b>hasta Junio 2025</b></td>
-      <td>$ 117,000.00</td>
-      <td>$ 114,600.00</td>
-      <td>$ 3,000.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>5276</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-48">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-48', 'desc-48')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-48">
-      </td>
-    </tr>
-    <tr>
-      <td>Exc Luna Llena htls Arg menores de 6 a 12 <br>(no incluye cena) <b>hasta Junio 2025</b> <br></td>
-      <td>$ 72,000.00</td>
-      <td>$ 69,700.00</td>
-      <td>$ 2,300.00</td>
-      <td>-</td>
-      <td>-</td>
-      <td>5276</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-49">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-49', 'desc-49')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-49">
-      </td>
-    </tr>
-    <tr>
-      <td>Aldea Guarani + Brunch htls Arg</td>
-      <td>$ 37,000.00</td>
-      <td>$ 33,500.00</td>
-      <td>$ 3,500.00</td>
-      <td>-</td>
-      <td>Lunes a Domingos <br>solo por la mañana</td>
-      <td>6435</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-50">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-50', 'desc-50')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-50">
-      </td>
-    </tr>
-    <tr>
-      <td>Aldea Guarani + Brunch htls Br/Melia</td>
-      <td>$ 43,000.00</td>
-      <td>$ 39,400.00</td>
-      <td>$ 3,600.00</td>
-      <td>-</td>
-      <td>Lunes a Domingos<br> solo por la mañana</td>
-      <td>6435</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-51">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-51', 'desc-51')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-51">
-      </td>
-    </tr>
-    <tr>
-      <td>Cena Show Rafain regular</td>
-      <td>U$D 70.00</td>
-      <td>Tipo de cambio<br> dolar Billete</td>
-      <td>Consultar comision</td>
-      <td>-</td>
-      <td><br></td>
-      <td>5179</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-52">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-52', 'desc-52')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-52">
-      </td>
-    </tr>
-    <tr>
-      <td>Cena Show Rafain Privado</td>
-      <td>U$D 80.00</td>
-      <td>Tipo de cambio<br> dolar Billete</td>
-      <td>Consultar comision</td>
-      <td>-</td>
-      <td><br></td>
-      <td>5179</td>
-      <td>
-        <input type="number" class="cantidad-input" min="1" value="1" id="cant-53">
-        <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-53', 'desc-53')">Agregar</button>
-        <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
-        <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-53">
-      </td>
-    </tr>
-  </table>
-
-  <div id="cotizacion">
-    <h2>Cotización de Servicios</h2>
-    <div id="serviciosSeleccionados">
-      <p>No hay servicios seleccionados</p>
+  
+  <!-- Contenido principal (inicialmente oculto) -->
+  <div class="main-content">
+    <div class="header">
+      <img src="https://static5.cuencadelplata.com/img/logo.png" alt="Turismo Cuenca del Plata">
+      <h1>TURISMO</h1>
+      <p>CUENCA DEL PLATA</p>
+      <p>Cuenca del Plata Receptivo Mayorista</p>
     </div>
-    <div id="totalCotizacion">Total: $0.00</div>
-    <div id="totalConDescuento" style="font-weight: bold; font-size: 1.2em; text-align: right; margin: 10px 0; color: #ff9800; display: none;">
-      Total con descuento: $0.00
-    </div>
-    
-    <div class="validez-cotizacion">
-      <strong>Validez de la cotización:</strong> 
-      <select id="diasValidez">
-        <option value="1">1 día</option>
-        <option value="2">2 días</option>
-        <option value="3" selected>3 días</option>
-        <option value="5">5 días</option>
-        <option value="7">7 días</option>
-        <option value="10">10 días</option>
-        <option value="15">15 días</option>
-        <option value="30">30 días</option>
-      </select>
-    </div>
-    
-    <div class="nota-importante">
-      <p>NOTA IMPORTANTE: Esta cotización está sujeta a modificaciones en virtud de las fluctuaciones del mercado o por factores económicos extremos. Los servicios cotizados están sujetos a disponibilidad al momento de la confirmación.</p>
-    </div>
-    
-    <div id="formularioEnvio">
-      <h3>Enviar Cotización</h3>
-      <input type="email" id="emailDestino" placeholder="Correo electrónico de destino" required>
-      <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
-      <input type="text" id="nombreVendedor" placeholder="Nombre del vendedor">
-      <textarea id="mensajeAdicional" placeholder="Mensaje adicional"></textarea>
+
+    <h1>Tarifario Servicios Opcionales Guias y choferes Enero a junio 2025</h1>
+
+    <input type="text" id="searchInput" placeholder="Buscar por Servicio, Venta o Id Mobile...">
+    <button onclick="searchTable()">Buscar</button>
+
+    <table id="priceTable">
+      <tr>
+        <th>Servicios</th>
+        <th>Venta</th>
+        <th>Neto</th>
+        <th>Comisión</th>
+        <th>Horarios</th>
+        <th>Salidas</th>
+        <th>Id Mobile</th>
+        <th class="columna-accion">Acción</th>
+      </tr>
+      <tr>
+        <td>Trf In o Out Apt Arg hacia htls Arg</td>
+        <td>$ 18,400.00</td>
+        <td>$ 17,000.00</td>
+        <td>$ 1,400.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>para in 5156<br>para out 6232</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-0">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-0', 'desc-0')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-0">
+        </td>
+      </tr>
+      <tr>
+        <td>Trf In o Out Apt Arg hacia htls Br (Mínimo 2 paxs)</td>
+        <td>$ 25,900.00</td>
+        <td>$ 24,400.00</td>
+        <td>$ 1,500.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td> para in 5156<br>para out 6232</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-1">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-1', 'desc-1')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-1">
+        </td>
+      </tr>
+      <tr>
+        <td>Ctts Argentinas sin ingreso desde htls Arg</td>
+        <td>$ 32,000.00</td>
+        <td>$ 30,000.00</td>
+        <td>$ 2,000.00</td>
+        <td>07:30</td>
+        <td>Todos los días</td>
+        <td>5163</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-2">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-2', 'desc-2')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-2">
+        </td>
+      </tr>
+      <tr>
+        <td>Ctts Argentinas sin ingreso desde htls Br/Meliá</td>
+        <td>$ 45,000.00</td>
+        <td>$ 42,900.00</td>
+        <td>$ 2,100.00</td>
+        <td>Todos los días</td>
+        <td>-</td>
+        <td>5163</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-3">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-3', 'desc-3')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-3">
+        </td>
+      </tr>
+      <tr>
+        <td>Cataratas Brasileras desde htls Arg/Br</td>
+        <td>$ 37,000.00</td>
+        <td>$ 34,900.00</td>
+        <td>$ 2,100.00</td>
+        <td>t/d por la mañana</td>
+        <td>-</td>
+        <td>5164</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-4">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-4', 'desc-4')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-4">
+        </td>
+      </tr>
+      <tr>
+        <td>Cataratas Brasileras desde Melia</td>
+        <td>$ 45,000.00</td>
+        <td>$ 42,900.00</td>
+        <td>$ 2,100.00</td>
+        <td>-</td>
+        <td>t/d por la mañana</td>
+        <td>5164</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-5">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-5', 'desc-5')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-5">
+        </td>
+      </tr>
+      <tr>
+        <td>Pque de Aves sólo trfs a cont. de cat br -<Br> sin ingresos</td>
+        <td>$ 22,900.00</td>
+        <td>$ 21,300.00</td>
+        <td>$ 1,600.00</td>
+        <td>-</td>
+        <td>todos los dias</td>
+        <td>5579</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-6">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-6', 'desc-6')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-6">
+        </td>
+      </tr>
+      <tr>
+        <td>Mocona Desde htls Arg</td>
+        <td>$ 73,800.00</td>
+        <td>$ 71,000.00</td>
+        <td>$ 2,800.00</td>
+        <td>-</td>
+        <td>Jueves y Domingos</td>
+        <td>6185</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-7">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-7', 'desc-7')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-7">
+        </td>
+      </tr>
+      <tr>
+        <td>Mocona Desde htls Br/Melia</td>
+        <td>$ 88,900.00</td>
+        <td>$ 85,700.00</td>
+        <td>$ 3,200.00</td>
+        <td>-</td>
+        <td>Jueves y Domingos</td>
+        <td>6185</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-8">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-8', 'desc-8')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-8">
+        </td>
+      </tr>
+      <tr>
+        <td>Ruinas y Minas htl Arg</td>
+        <td>$ 58,000.00</td>
+        <td>$ 55,500.00</td>
+        <td>$ 2,500.00</td>
+        <td>07:30</td>
+        <td>lunes , miercoles y sabados</td>
+        <td>5166</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-9">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-9', 'desc-9')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-9">
+        </td>
+      </tr>
+      <tr>
+        <td>Ruinas y Minas htls Br/Melia</td>
+        <td>$ 72,000.00</td>
+        <td>$ 69,200.00</td>
+        <td>$ 2,800.00</td>
+        <td>-</td>
+        <td>lunes , miercoles y sabados</td>
+        <td>5166</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-10">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-10', 'desc-10')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-10">
+        </td>
+      </tr>
+      <tr>
+        <td>Jungle Fly desde htls Arg</td>
+        <td>$ 40,000.00</td>
+        <td>$ 36,300.00</td>
+        <td>$ 3,700.00</td>
+        <td>08:00/10:00 <br> 14:00/16:00</td>
+        <td>lunes a Domingo</td>
+        <td>6396</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-11">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-11', 'desc-11')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-11">
+        </td>
+      </tr>
+      <tr>
+        <td>Jungle Fly desde htls Br/Melia</td>
+        <td>$ 45,400.00</td>
+        <td>$ 41,700.00</td>
+        <td>$ 3,700.00</td>
+        <td>08:00/10:00 <br> 14:00/16:00</td>
+        <td>lunes a Domingo</td>
+        <td>6396</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-12">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-12', 'desc-12')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-12">
+        </td>
+      </tr>
+      <tr>
+        <td>Jungle Fly menores desde htls Arg</td>
+        <td>$ 28,800.00</td>
+        <td>$ 27,000.00</td>
+        <td>$ 1,800.00</td>
+        <td>08:00/10:00 <br> 14:00/16:00</td>
+        <td>lunes a Domingo</td>
+        <td>6396</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-13">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-13', 'desc-13')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-13">
+        </td>
+      </tr>
+      <tr>
+        <td>Jungle Fly menores desde htls Br/Melia</td>
+        <td>$ 34,300.00</td>
+        <td>$ 32,400.00</td>
+        <td>$ 1,900.00</td>
+        <td>08:00/10:00 <br> 14:00/16:00</td>
+        <td>lunes a Domingo</td>
+        <td>6396</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-14">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-14', 'desc-14')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-14">
+        </td>
+      </tr>
+      <tr>
+        <td>Minas de Wanda desde htls Arg</td>
+        <td>$ 22,400.00</td>
+        <td>$ 20,600.00</td>
+        <td>$ 1,800.00</td>
+        <td>09:00/15:00</td>
+        <td>-</td>
+        <td>5167</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-15">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-15', 'desc-15')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-15">
+        </td>
+      </tr>
+      <tr>
+        <td>Minas de Wanda desde htls Br/Melia</td>
+        <td>$ 34,800.00</td>
+        <td>$ 32,700.00</td>
+        <td>$ 2,100.00</td>
+        <td>09:00/15:00</td>
+        <td>-</td>
+        <td>5167</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-16">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-16', 'desc-16')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-16">
+        </td>
+      </tr>
+      <tr>
+        <td>Dutty Free Shop</td>
+        <td>$ 15,000.00</td>
+        <td>$ 13,200.00</td>
+        <td>$ 1,800.00</td>
+        <td>-</td>
+        <td>Todos los dias</td>
+        <td>5836</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-17">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-17', 'desc-17')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-17">
+        </td>
+      </tr>
+      <tr>
+        <td>Caminata Recreativa en la selva</td>
+        <td>$ consultar</td>
+        <td>$ consultar</td>
+        <td>$ consultar</td>
+        <td>08:00/10:00 <br>14:00/16:00</td>
+        <td>Lunes a Domingo</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-18">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-18', 'desc-18')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-18">
+        </td>
+      </tr>
+      <tr>
+        <td>Travesia Iguazu<br><b>a partir del 01/11/24 <b></td>
+        <td>$ 35,000.00</td>
+        <td>$ 33,400.00</td>
+        <td>$ 1,600.00</td>
+        <td>-</td>
+        <td>Todos los dias</td>
+        <td>6576</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-19">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-19', 'desc-19')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-19">
+        </td>
+      </tr>
+      <tr>
+        <td>Travesia Iguazu Menores de 7 a 16 años<br><b> partir del 01/11/24 <b></td>
+        <td>$ 28,000.00</td>
+        <td>$ 26,700.00</td>
+        <td>$ 1,300.00</td>
+        <td>-</td>
+        <td>Todos los dias</td>
+        <td>6576</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-20">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-20', 'desc-20')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-20">
+        </td>
+      </tr>
+      <tr>
+        <td>Gran Aventura <br><b>partir del 01/11/24<b></td>
+        <td>$ 75,000.00</td>
+        <td>$ 72,600.00</td>
+        <td>$ 2,400.00</td>
+        <td>En Exc con Ctts Arg</td>
+        <td>-</td>
+        <td>5158</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-21">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-21', 'desc-21')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-21">
+        </td>
+      </tr>
+      <tr>
+        <td>Gran Aventura Menores de 12 a 16 años y Jubilados<br><b>partir del 01/11/24<b></td>
+        <td>$ 60,000.00</td>
+        <td>$ 57,800.00</td>
+        <td>$ 2,200.00</td>
+        <td>En Exc con Ctts Arg</td>
+        <td>-</td>
+        <td>5158</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-22">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-22', 'desc-22')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-22">
+        </td>
+      </tr>
+      <tr>
+        <td>Paseo Ecologico <br><b>partir del 01/11/24</b></td>
+        <td>$ 27,000.00</td>
+        <td>$ 25,700.00</td>
+        <td>$ 1,300.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-23">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-23', 'desc-23')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-23">
+        </td>
+      </tr>
+      <tr>
+        <td>Paseo Ecologico Menores de 12 a 16 años y Jubilados <br><b> partir del 01/11/24</b></td>
+        <td>$ 21,600.00</td>
+        <td>$ 20,500.00</td>
+        <td>$ 1,100.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-24">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-24', 'desc-24')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-24">
+        </td>
+      </tr>
+      <tr>
+        <td>Ingreso Biocentro General</td>
+        <td>$ 5,000.00</td>
+        <td>$ 4,200.00</td>
+        <td>$ 800.00</td>
+        <td>09:00 a 18:00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-25">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-25', 'desc-25')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-25">
+        </td>
+      </tr>
+      <tr>
+        <td>Ingreso a Biocentro Menores de 6 a 12 años</td>
+        <td>$ 4,300.00</td>
+        <td>$ 3,800.00</td>
+        <td>$ 500.00</td>
+        <td>09:00 a 18:00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-26">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-26', 'desc-26')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-26">
+        </td>
+      </tr>
+      <tr>
+        <td>Ingreso a Biocentro Jubilados</td>
+        <td>$ 4,500.00</td>
+        <td>$ 3,900.00</td>
+        <td>$ 600.00</td>
+        <td>09:00 a 18:00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-27">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-27', 'desc-27')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-27">
+        </td>
+      </tr>
+      <tr>
+        <td>Madero Tango P/Paxs Sector Premium con Cena<br> y Show desde htls Arg</td>
+        <td>$ 60,000.00</td>
+        <td>$ 56,300.00</td>
+        <td>$ 3,700.00</td>
+        <td>20:00</td>
+        <td>Martes a Domingos</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-28">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-28', 'desc-28')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-28">
+        </td>
+      </tr>
+      <tr>
+        <td>Madero Tango P/Paxs Sector Vip <br> Desde Htls Arg</td>
+        <td>$ 45,000.00</td>
+        <td>$ 42,500.00</td>
+        <td>$ 2,500.00</td>
+        <td>20:00</td>
+        <td>Martes a Domingos</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-29">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-29', 'desc-29')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-29">
+        </td>
+      </tr>
+      <tr>
+        <td>Madero Tango P/Paxs <br>Solo Show Desde Htls Arg</td>
+        <td>$ 25,000.00</td>
+        <td>$ 23,600.00</td>
+        <td>$ 1,400.00</td>
+        <td>20:00</td>
+        <td>Martes a Domingos</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-30">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-30', 'desc-30')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-30">
+        </td>
+      </tr>
+      <tr>
+        <td>Catamaran desde htls Arg <br>del 15/04/25 al 29/06/25</td>
+        <td>$ 35,000.00</td>
+        <td>$ 33,300.00</td>
+        <td>$ 1,700.00</td>
+        <td>16:40</td>
+        <td>Martes a Domingos</td>
+        <td>6287</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-31">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-31', 'desc-31')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-31">
+        </td>
+      </tr>
+      <tr>
+        <td>Catamaran desde Htls Br<br> del 15/04/25 al 29/06/25</td>
+        <td>$ 40,000.00</td>
+        <td>$ 38,200.00</td>
+        <td>$ 1,800.00</td>
+        <td>16:40</td>
+        <td>Martes a Domingos</td>
+        <td>6287</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-32">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-32', 'desc-32')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-32">
+        </td>
+      </tr>
+      <tr>
+        <td>Catamaran Menores de 6 a 12 años htls Arg<br> del 15/04/25 al 29/06/25</td>
+        <td>$ 22,000.00</td>
+        <td>$ 20,800.00</td>
+        <td>$ 1,200.00</td>
+        <td>16:00</td>
+        <td>Martes a Domingos</td>
+        <td>6287</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-33">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-33', 'desc-33')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-33">
+        </td>
+      </tr>
+      <tr>
+        <td>Catamaran Menores de 6 a 12 años htls Br <br>del 15/04/25 al 29/06/25</td>
+        <td>$ 27,000.00</td>
+        <td>$ 25,700.00</td>
+        <td>$ 1,300.00</td>
+        <td>-</td>
+        <td>Todos los dias</td>
+        <td>6287</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-34">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-34', 'desc-34')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-34">
+        </td>
+      </tr>
+      <tr>
+        <td>Catamaran Menores de 0 a 5 años <br>del 15/04/25 al 29/06/25</td>
+        <td>$ 10,100.00</td>
+        <td>$ 9,100.00</td>
+        <td>$ 1,000.00</td>
+        <td>16:00</td>
+        <td>Martes a Domingos</td>
+        <td>6287</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-35">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-35', 'desc-35')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-35">
+        </td>
+      </tr>
+      <tr>
+        <td>Paquete Catamaran + merienda yabutucaba <br>desde htls Arg <br>a partir del 15/04/25</td>
+        <td>$ 37,000.00</td>
+        <td>$ 34,800.00</td>
+        <td>$ 2,200.00</td>
+        <td>16:40</td>
+        <td>Martes a Domingos</td>
+        <td>6609</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-36">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-36', 'desc-36')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-36">
+        </td>
+      </tr>
+      <tr>
+        <td>Paquete Catamaran + merienda yabutucaba<br> desde Htls Br<br> a partir del 15/04/25</td>
+        <td>$ 44,400.00</td>
+        <td>$ 42,000.00</td>
+        <td>$ 2,400.00</td>
+        <td>16:40</td>
+        <td>Martes a Domingos</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-37">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-37', 'desc-37')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-37">
+        </td>
+      </tr>
+      <tr>
+        <td>Paquete Catamaran + merienda yabutucaba <br>Menores de 6 a 12 años htls Arg<br> a partir del 15/04/25</td>
+        <td>$ 27,600.00</td>
+        <td>$ 25,900.00</td>
+        <td>$ 1,700.00</td>
+        <td>16:00</td>
+        <td>Martes a Domingos</td>
+        <td>6609</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-38">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-38', 'desc-38')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-38">
+        </td>
+      </tr>
+      <tr>
+        <td>Paquete Catamaran + merienda yabutucaba <br> Menores de 6 a 12 años htls Br <br>a partir del 15/04/25</td>
+        <td>$ 30,500.00</td>
+        <td>$ 28,700.00</td>
+        <td>$ 1,800.00</td>
+        <td>-</td>
+        <td>Todos los dias</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-39">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-39', 'desc-39')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-39">
+        </td>
+      </tr>
+      <tr>
+        <td>Combo Aldea + bio desdes htls Arg</td>
+        <td>$ 43,000.00</td>
+        <td>$ 39,800.00</td>
+        <td>$ 3,200.00</td>
+        <td>08:30</td>
+        <td>Lunes a Domingos <br>solo por la mañana</td>
+        <td>6184</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-40">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-40', 'desc-40')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-40">
+        </td>
+      </tr>
+      <tr>
+        <td>Combo Aldea + bio desdes htls Br/Melia</td>
+        <td>$ 49,000.00</td>
+        <td>$ 45,500.00</td>
+        <td>$ 3,500.00</td>
+        <td>-</td>
+        <td>Lunes a Domingos <br>solo por la mañana</td>
+        <td>6576</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-41">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-41', 'desc-41')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-41">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc City tour en P. Iguazu htls Arg</td>
+        <td>$ 19,500.00</td>
+        <td>$ 18,000.00</td>
+        <td>$ 1,500.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-42">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-42', 'desc-42')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-42">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc City tour en P. Iguazu htls Br/Melia</td>
+        <td>$ 34,500.00</td>
+        <td>$ 32,900.00</td>
+        <td>$ 1,600.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-43">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-43', 'desc-43')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-43">
+        </td>
+      </tr>
+      <tr>
+        <td>Aldea Guarani desde htl Arg</td>
+        <td>$ 30,700.00</td>
+        <td>$ 28,300.00</td>
+        <td>$ 2,400.00</td>
+        <td>-</td>
+        <td>Lunes a Domingos <br>solo por la mañana</td>
+        <td>5177</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-44">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-44', 'desc-44')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-44">
+        </td>
+      </tr>
+      <tr>
+        <td>Aldea Guarani desde htl Br/Melia</td>
+        <td>$ 38,700.00</td>
+        <td>$ 35,900.00</td>
+        <td>$ 2,800.00</td>
+        <td>-</td>
+        <td>Lunes a Domingos <br>solo por la mañana</td>
+        <td>5177</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-45">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-45', 'desc-45')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-45">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc Tour de compras en Ciudad del Este/htls Arg</td>
+        <td>$ 23,500.00</td>
+        <td>$ 22,000.00</td>
+        <td>$ 1,500.00</td>
+        <td>-</td>
+        <td>Martes, Jueves y Sabados</td>
+        <td>5196</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-46">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-46', 'desc-46')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-46">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc Tour de compras en Ciudad del Este/htls Br/Melia</td>
+        <td>$ 29,300.00</td>
+        <td>$ 27,400.00</td>
+        <td>$ 1,900.00</td>
+        <td>-</td>
+        <td>Martes,Jueves y Sabados</td>
+        <td>5196</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-47">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-47', 'desc-47')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-47">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc Luna Llena htls Arg (no incluye cena)<br><b>hasta Junio 2025</b></td>
+        <td>$ 117,000.00</td>
+        <td>$ 114,600.00</td>
+        <td>$ 3,000.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>5276</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-48">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-48', 'desc-48')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-48">
+        </td>
+      </tr>
+      <tr>
+        <td>Exc Luna Llena htls Arg menores de 6 a 12 <br>(no incluye cena) <b>hasta Junio 2025</b> <br></td>
+        <td>$ 72,000.00</td>
+        <td>$ 69,700.00</td>
+        <td>$ 2,300.00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>5276</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-49">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-49', 'desc-49')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-49">
+        </td>
+      </tr>
+      <tr>
+        <td>Aldea Guarani + Brunch htls Arg</td>
+        <td>$ 37,000.00</td>
+        <td>$ 33,500.00</td>
+        <td>$ 3,500.00</td>
+        <td>-</td>
+        <td>Lunes a Domingos <br>solo por la mañana</td>
+        <td>6435</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-50">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-50', 'desc-50')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-50">
+        </td>
+      </tr>
+      <tr>
+        <td>Aldea Guarani + Brunch htls Br/Melia</td>
+        <td>$ 43,000.00</td>
+        <td>$ 39,400.00</td>
+        <td>$ 3,600.00</td>
+        <td>-</td>
+        <td>Lunes a Domingos<br> solo por la mañana</td>
+        <td>6435</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-51">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-51', 'desc-51')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-51">
+        </td>
+      </tr>
+      <tr>
+        <td>Cena Show Rafain regular</td>
+        <td>U$D 70.00</td>
+        <td>Tipo de cambio<br> dolar Billete</td>
+        <td>Consultar comision</td>
+        <td>-</td>
+        <td><br></td>
+        <td>5179</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-52">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-52', 'desc-52')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-52">
+        </td>
+      </tr>
+      <tr>
+        <td>Cena Show Rafain Privado</td>
+        <td>U$D 80.00</td>
+        <td>Tipo de cambio<br> dolar Billete</td>
+        <td>Consultar comision</td>
+        <td>-</td>
+        <td><br></td>
+        <td>5179</td>
+        <td>
+          <input type="number" class="cantidad-input" min="1" value="1" id="cant-53">
+          <button class="btn-agregar" onclick="agregarACotizacion(this, 'cant-53', 'desc-53')">Agregar</button>
+          <button class="btn-descuento" onclick="toggleDescuento(this)">%</button>
+          <input type="number" class="descuento-input" min="0" max="100" value="0" id="desc-53">
+        </td>
+      </tr>
+    </table>
+
+    <div id="cotizacion">
+      <h2>Cotización de Servicios</h2>
+      <div id="serviciosSeleccionados">
+        <p>No hay servicios seleccionados</p>
+      </div>
+      <div id="totalCotizacion">Total: $0.00</div>
+      <div id="totalConDescuento" style="font-weight: bold; font-size: 1.2em; text-align: right; margin: 10px 0; color: #ff9800; display: none;">
+        Total con descuento: $0.00
+      </div>
       
-      <div class="botones-accion">
-        <div>
-          <button onclick="enviarCotizacion()">Enviar por Correo</button>
-          <button onclick="generarPDF()">Generar PDF</button>
+      <div class="validez-cotizacion">
+        <strong>Validez de la cotización:</strong> 
+        <select id="diasValidez">
+          <option value="1">1 día</option>
+          <option value="2">2 días</option>
+          <option value="3" selected>3 días</option>
+          <option value="5">5 días</option>
+          <option value="7">7 días</option>
+          <option value="10">10 días</option>
+          <option value="15">15 días</option>
+          <option value="30">30 días</option>
+        </select>
+      </div>
+      
+      <div class="nota-importante">
+        <p>NOTA IMPORTANTE: Esta cotización está sujeta a modificaciones en virtud de las fluctuaciones del mercado o por factores económicos extremos. Los servicios cotizados están sujetos a disponibilidad al momento de la confirmación.</p>
+      </div>
+      
+      <div id="formularioEnvio">
+        <h3>Enviar Cotización</h3>
+        <input type="email" id="emailDestino" placeholder="Correo electrónico de destino" required>
+        <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
+        <input type="text" id="nombreVendedor" placeholder="Nombre del vendedor">
+        <textarea id="mensajeAdicional" placeholder="Mensaje adicional"></textarea>
+        
+        <div class="botones-accion">
+          <div>
+            <button onclick="enviarCotizacion()">Enviar por Correo</button>
+            <button onclick="generarPDF()">Generar PDF</button>
+          </div>
+          <button onclick="limpiarCotizacion()" style="background-color: #f44336;">Limpiar Cotización</button>
         </div>
-        <button onclick="limpiarCotizacion()" style="background-color: #f44336;">Limpiar Cotización</button>
       </div>
     </div>
   </div>
@@ -1111,6 +1201,58 @@
     var serviciosCotizados = [];
     var totalCotizacion = 0;
     var totalConDescuento = 0;
+    
+    // Función para verificar el login
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorElement = document.getElementById("loginError");
+      
+      // Credenciales válidas
+      const validUsername = "cuenca01";
+      const validPassword = "tarifascuenca2025";
+      
+      if (username === validUsername && password === validPassword) {
+        // Ocultar formulario de login
+        document.getElementById("loginContainer").style.display = "none";
+        // Mostrar contenido principal
+        document.querySelector(".main-content").style.display = "block";
+        // Mostrar botón de logout
+        document.getElementById("logoutBtn").style.display = "block";
+        // Guardar estado de sesión en localStorage
+        localStorage.setItem("loggedIn", "true");
+      } else {
+        errorElement.textContent = "Usuario o contraseña incorrectos";
+      }
+    }
+    
+    // Función para cerrar sesión
+    function logout() {
+      // Ocultar contenido principal
+      document.querySelector(".main-content").style.display = "none";
+      // Ocultar botón de logout
+      document.getElementById("logoutBtn").style.display = "none";
+      // Mostrar formulario de login
+      document.getElementById("loginContainer").style.display = "flex";
+      // Limpiar campos de login
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("loginError").textContent = "";
+      // Eliminar estado de sesión
+      localStorage.removeItem("loggedIn");
+    }
+    
+    // Verificar si el usuario ya está logueado al cargar la página
+    window.onload = function() {
+      if (localStorage.getItem("loggedIn") === "true") {
+        // Ocultar formulario de login
+        document.getElementById("loginContainer").style.display = "none";
+        // Mostrar contenido principal
+        document.querySelector(".main-content").style.display = "block";
+        // Mostrar botón de logout
+        document.getElementById("logoutBtn").style.display = "block";
+      }
+    };
 
     function searchTable() {
       var input, filter, table, tr, td, i, txtValue;
